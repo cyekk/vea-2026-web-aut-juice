@@ -1,6 +1,12 @@
+import { BasketPage } from '../pageObjects/basketPage.js';
+import { DeliveryMethodPage } from '../pageObjects/deliveryMethodPage.js';
 import { HomePage } from '../pageObjects/HomePage';
 import { LoginPage } from '../pageObjects/loginPage';
+import { OrderCompletionPage } from '../pageObjects/orderCompletionPage.js';
+import { OrderSummaryPage } from '../pageObjects/orderSummaryPage.js';
+import { PaymentOptionsPage } from '../pageObjects/paymentOptionsPage.js';
 import { RegistrationPage } from '../pageObjects/registrationPage';
+import { SelectAddressPage } from '../pageObjects/selectAddressPage.js';
 
 describe('Juice-shop scenarios', () => {
   //===========================================================================
@@ -133,7 +139,7 @@ describe('Juice-shop scenarios', () => {
       HomePage.reviewText.contains('Tastes like metal');
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    it.only('Validate product card amount', () => {
+    it('Validate product card amount', () => {
       // Validate that the default amount of cards is 12
       HomePage.productNames.should('have.length', 12);
 
@@ -148,27 +154,29 @@ describe('Juice-shop scenarios', () => {
       HomePage.productNames.should('have.length', 36); // Validate
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    // Create scenario - Buy Girlie T-shirt
-    // Click on search icon
-    // Search for Girlie
-    // Add to basket "Girlie"
-    // Click on "Your Basket" button
-    // Create page object - BasketPage
-    // Click on "Checkout" button
-    // Create page object - SelectAddressPage
-    // Select address containing "United Fakedom"
-    // Click Continue button
-    // Create page object - DeliveryMethodPage
-    // Select delivery speed Standard Delivery
-    // Click Continue button
-    // Create page object - PaymentOptionsPage
-    // Select card that ends with "5678"
-    // Click Continue button
-    // Create page object - OrderSummaryPage
-    // Click on "Place your order and pay"
-    // Create page object - OrderCompletionPage
-    // Validate confirmation - "Thank you for your purchase!"
+    it.only('Buy Girlie T-shirt', () => {
+      HomePage.searchIcon.click();                // Click on search icon
+      HomePage.searchField.type('Girlie{enter}'); // Search for Girlie
+      HomePage.basketButton.click();              // Add to basket "Girlie"
+      HomePage.yourBasketButton.click();          // Click on "Your Basket" button
 
+      BasketPage.checkoutButton.click();                                     // Click on "Checkout" button
+
+      SelectAddressPage.addressRows.contains('United Fakedom').click();      // Select address containing "United Fakedom"
+      SelectAddressPage.continueButton.click();                              // Click Continue button
+
+      DeliveryMethodPage.deliveryRows.contains('Standard Delivery').click(); // Select delivery speed Standard Delivery
+      DeliveryMethodPage.continueButton.click();                             // Click Continue button
+
+      // Select card that ends with "5678"
+      PaymentOptionsPage.paymentRows.contains('5678').parent().find(PaymentOptionsPage.radioButton).click();
+      PaymentOptionsPage.continueButton.click();                             // Click Continue button
+
+      OrderSummaryPage.checkoutButton.click();                               // Click on "Place your order and pay"
+
+      // Validate confirmation - "Thank you for your purchase!"
+      OrderCompletionPage.confirm.should('contain.text', 'Thank you for your purchase!');
+    });
     //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Add address
     // Click on Account
