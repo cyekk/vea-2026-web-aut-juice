@@ -1,4 +1,5 @@
 import { BasketPage } from '../pageObjects/basketPage.js';
+import { CreateAddressPage } from '../pageObjects/createAddressPage.js';
 import { DeliveryMethodPage } from '../pageObjects/deliveryMethodPage.js';
 import { HomePage } from '../pageObjects/HomePage';
 import { LoginPage } from '../pageObjects/loginPage';
@@ -6,6 +7,7 @@ import { OrderCompletionPage } from '../pageObjects/orderCompletionPage.js';
 import { OrderSummaryPage } from '../pageObjects/orderSummaryPage.js';
 import { PaymentOptionsPage } from '../pageObjects/paymentOptionsPage.js';
 import { RegistrationPage } from '../pageObjects/registrationPage';
+import { SavedAddressesPage } from '../pageObjects/savedAddressesPage.js';
 import { SelectAddressPage } from '../pageObjects/selectAddressPage.js';
 
 describe('Juice-shop scenarios', () => {
@@ -154,7 +156,7 @@ describe('Juice-shop scenarios', () => {
       HomePage.productNames.should('have.length', 36); // Validate
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    it.only('Buy Girlie T-shirt', () => {
+    it('Buy Girlie T-shirt', () => {
       HomePage.searchIcon.click();                // Click on search icon
       HomePage.searchField.type('Girlie{enter}'); // Search for Girlie
       HomePage.basketButton.click();              // Add to basket "Girlie"
@@ -178,17 +180,38 @@ describe('Juice-shop scenarios', () => {
       OrderCompletionPage.confirm.should('contain.text', 'Thank you for your purchase!');
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    // Create scenario - Add address
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My saved addresses
-    // Create page object - SavedAddressesPage
-    // Click on Add New Address
-    // Create page object - CreateAddressPage
-    // Fill in the necessary information
-    // Click Submit button
-    // Validate that previously added address is visible
+    it.only('Add address', () => {
+      HomePage.accountButton.click();                              // Click on Account
+      HomePage.accountMenu.contains('Orders & Payment').click();   // Click on Orders & Payment
+      HomePage.accountMenu.contains('My saved addresses').click(); // Click on My saved addresses
 
+      SavedAddressesPage.newAddressButton.click();                 // Click on Add New Address
+
+      // Fill in the necessary information
+      const testData = {
+        country:         'USF',
+        name:           'John',
+        mobile:     '12345670',
+        zip:           '00000',
+        address: 'Faketon St.',
+        city:      'Fakeville',
+        state:     'Florifake',
+      }
+      CreateAddressPage.addressField('Country').type(testData.country);
+      CreateAddressPage.addressField('Name').type(testData.name);
+      CreateAddressPage.addressField('Mobile Number').type(testData.mobile);
+      CreateAddressPage.addressField('ZIP Code').type(testData.zip);
+      CreateAddressPage.addressField('Address').type(testData.address);
+      CreateAddressPage.addressField('City').type(testData.city);
+      CreateAddressPage.addressField('State').type(testData.state);
+
+      CreateAddressPage.submitButton.click(); // Click Submit button
+
+      // Validate that previously added address is visible
+      SavedAddressesPage.allAddresses.contains(testData.name).should("contain.text", testData.name);
+      SavedAddressesPage.allAddresses.contains(testData.address).should("contain.text", testData.address + ", " + testData.city + ", " + testData.state + ", " + testData.zip);
+      SavedAddressesPage.allAddresses.contains(testData.country).should("contain.text", testData.country);
+    });
     //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Add payment option
     // Click on Account

@@ -77,4 +77,9 @@ export class HomePage extends BasePage {
     return cy.get("[aria-label = 'Show the shopping cart']");
   }
   //---------------------------------------------------------
+  static get accountMenu(){
+    return cy.get('button[mat-menu-item]');
+  }
+
+  //---------------------------------------------------------
 }
