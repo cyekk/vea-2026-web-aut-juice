@@ -25,4 +25,24 @@ export class HomePage extends BasePage {
     return cy.get("button[aria-label='Go to user profile']").find("span");
   }
   //---------------------------------------------------------
+  static get searchIcon(){
+    return cy.get('#searchQuery');
+  }
+
+  static get searchField(){
+    return cy.get('#searchQuery input');
+  }
+
+  static get productNames(){
+    return cy.get('[class="mat-grid-tile ng-star-inserted"]').find('[class="info-box"]');
+  }
+
+  static get productBoxInfo(){
+    return cy.get('mat-dialog-content .details-row');
+  }
+  //---------------------------------------------------------
+  static get closeButton(){
+    return cy.get('.close-dialog');
+  }
+  //---------------------------------------------------------
 }

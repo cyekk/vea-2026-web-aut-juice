@@ -11,7 +11,7 @@ describe('Juice-shop scenarios', () => {
       HomePage.meWantItButton.click();
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    it.only('Login', () => {
+    it('Login', () => {
       
       HomePage.accountButton.click();       // Click Account button
       HomePage.loginButton.click();         // Click Login button
@@ -61,32 +61,50 @@ describe('Juice-shop scenarios', () => {
       cy.login('demo', 'demo'); //Izmanto funkc., kas ir "commands.js"
       HomePage.visit();
     });
-
+    //--------------------------------------------------------------------------------------------------------------------------------------
     it('Search and validate Lemon', () => {
-      // Click on search icon
-      // Search for Lemon
-      // Select a product card - Lemon Juice (500ml)
+      HomePage.searchIcon.click();                                   // Click on search icon
+      HomePage.searchField.type('Lemon{enter}');                     // Search for Lemon
+      HomePage.productNames.contains('Lemon Juice (500ml)').click(); // Select a product card - Lemon Juice (500ml)
+     
       // Validate that the card (should) contains "Sour but full of vitamins."
+      HomePage.productBoxInfo.should('contain.text','Sour but full of vitamins.');
     });
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    it('Search 500ml and validate Lemon, while having multiple cards', () => {
+      HomePage.searchIcon.click();               // Click on search icon
+      HomePage.searchField.type('500ml{enter}'); // Search for 500ml
+      
+      // Select a product card - Lemon Juice (500ml)
+      HomePage.productNames.contains('Lemon Juice (500ml)').click();
+      // Validate that the card (should) contains "Sour but full of vitamins."
+      HomePage.productBoxInfo.should('contain.text','Sour but full of vitamins.');
+    });
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    it.only('Search 500ml and validate cards', () => {
+      HomePage.searchIcon.click();               // Click on search icon
+      HomePage.searchField.type('500ml{enter}'); // Search for 500ml
+      
+      // Select a product card - Eggfruit Juice (500ml)
+      HomePage.productNames.contains('Eggfruit Juice (500ml)').click();
+      // Validate that the card (should) contains "Now with even more exotic flavour."
+      HomePage.productBoxInfo.should('contain.text','Now with even more exotic flavour.');
+      // Close the card
+      HomePage.closeButton.click();
 
-    // Create scenario - Search 500ml and validate Lemon, while having multiple cards
-    // Click on search icon
-    // Search for 500ml
-    // Select a product card - Lemon Juice (500ml)
-    // Validate that the card (should) contains "Sour but full of vitamins."
+      // Select a product card - Lemon Juice (500ml)
+      HomePage.productNames.contains('Lemon Juice (500ml)').click();
+      // Validate that the card (should) contains "Sour but full of vitamins."
+      HomePage.productBoxInfo.should('contain.text','Sour but full of vitamins.');
+      // Close the card
+      HomePage.closeButton.click();
 
-    // Create scenario - Search 500ml and validate cards
-    // Click on search icon
-    // Search for 500ml
-    // Select a product card - Eggfruit Juice (500ml)
-    // Validate that the card (should) contains "Now with even more exotic flavour."
-    // Close the card
-    // Select a product card - Lemon Juice (500ml)
-    // Validate that the card (should) contains "Sour but full of vitamins."
-    // Close the card
-    // Select a product card - Strawberry Juice (500ml)
-    // Validate that the card (should) contains "Sweet & tasty!"
-
+      // Select a product card - Strawberry Juice (500ml)
+      HomePage.productNames.contains('Strawberry Juice (500ml)').click();
+      // Validate that the card (should) contains "Sweet & tasty!"
+      HomePage.productBoxInfo.should('contain.text','Sweet & tasty!');
+    });
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Read a review
     // Click on search icon
     // Search for King
@@ -94,6 +112,7 @@ describe('Juice-shop scenarios', () => {
     // Click expand reviews button/icon (wait for reviews to appear)
     // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Add a review
     // Click on search icon
     // Search for Raspberry
@@ -103,6 +122,7 @@ describe('Juice-shop scenarios', () => {
     // Click expand reviews button/icon (wait for reviews to appear)
     // Validate review -  "Tastes like metal"
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Validate product card amount
     // Validate that the default amount of cards is 12
     // Change items per page (at the bottom of page) to 24
@@ -110,6 +130,7 @@ describe('Juice-shop scenarios', () => {
     // Change items per page (at the bottom of page) to 36
     // Validate that the amount of cards is 35
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Buy Girlie T-shirt
     // Click on search icon
     // Search for Girlie
@@ -131,6 +152,7 @@ describe('Juice-shop scenarios', () => {
     // Create page object - OrderCompletionPage
     // Validate confirmation - "Thank you for your purchase!"
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Add address
     // Click on Account
     // Click on Orders & Payment
@@ -142,6 +164,7 @@ describe('Juice-shop scenarios', () => {
     // Click Submit button
     // Validate that previously added address is visible
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Add payment option
     // Click on Account
     // Click on Orders & Payment
@@ -154,6 +177,7 @@ describe('Juice-shop scenarios', () => {
     // Set expiry year to 2090
     // Click Submit button
     // Validate that the card shows up in the list
+    //--------------------------------------------------------------------------------------------------------------------------------------
   });
   //===========================================================================
 });
