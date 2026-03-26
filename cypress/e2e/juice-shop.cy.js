@@ -1,46 +1,64 @@
 import { HomePage } from '../pageObjects/HomePage';
+import { LoginPage } from '../pageObjects/loginPage';
+import { RegistrationPage } from '../pageObjects/registrationPage';
 
 describe('Juice-shop scenarios', () => {
+  //===========================================================================
   context('Without auto login', () => {
     beforeEach(() => {
       HomePage.visit();
       HomePage.dismissButton.click();
       HomePage.meWantItButton.click();
     });
+    //--------------------------------------------------------------------------------------------------------------------------------------
+    it.only('Login', () => {
+      
+      HomePage.accountButton.click();       // Click Account button
+      HomePage.loginButton.click();         // Click Login button
+      LoginPage.emailField.type('demo');    // Set email value to "demo"
+      LoginPage.passwordField.type('demo'); // Set password value to "demo"
+      LoginPage.loginButton.click();        // Click Log in
+      HomePage.accountButton.click();       // Click Account button
 
-    it('Login', () => {
-      // Click Account button
-      // Click Login button
-      // Set email value to "demo"
-      // Set password value to "demo"
-      // Click Log in
-      // Click Account button
       // Validate that "demo" account name appears in the menu section
+      HomePage.userProfileButton.should('contain.text', 'demo');
     });
-
+    //--------------------------------------------------------------------------------------------------------------------------------------
     it('Registration', () => {
-      // Click Account button
-      // Login button
-      // Click "Not yet a customer?"
-      // Find - how to generate random number in JS
-      // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
-      // Save that email address to some variable
-      // Fill in password field and repeat password field with same password
-      // Click on Security Question menu
-      // Select  "Name of your favorite pet?"
-      // Fill in answer
-      // Click Register button
-      // Set email value to previously created email
-      // Set password value to previously used password value
-      // Click login button
-      // Click Account button
-      // Validate that account name (with previously created email address) appears in the menu section
-    });
-  });
+      HomePage.accountButton.click();       // Click Account button
+      HomePage.loginButton.click();         // Login button
+      LoginPage.notYetCustomerLink.click(); // Click "Not yet a customer?"
+      
+      // Generate random number in JS 
+      const randomNumber = Math.floor(Math.random() * 10000);
+      // Use that number to genarate unique email address & Save that email address to some variable
+      const email = `email_${randomNumber}@inbox.lv`;
+      RegistrationPage.emailField.type(email);
 
+      // Fill in password field and repeat password field with same password
+      const password = 'password123';
+      RegistrationPage.passwordField.type(password);
+      RegistrationPage.repeatPasswordField.type(password);
+
+      RegistrationPage.securityQuestionDropdown.click();                                       // Click on Security Question menu
+      RegistrationPage.securityQuestionOptions.contains('Name of your favorite pet?').click(); // Select "Name of your favorite pet?"
+      RegistrationPage.answerField.type('Pikachu the mouse B)');                               // Fill in answer
+      RegistrationPage.registerButton.click();                                                 // Click Register button
+
+      LoginPage.emailField.type(email);                                                        // Set email value to previously created email
+      LoginPage.passwordField.type(password);                                                  // Set password value to previously used password value
+      LoginPage.loginButton.click();                                                           // Click login button
+      HomePage.accountButton.click();                                                          // Click Account button
+      
+      // Validate that account name (with previously created email address) appears in the menu section
+      HomePage.userProfileButton.should('contain.text', email);
+    });
+    //--------------------------------------------------------------------------------------------------------------------------------------
+  });
+  //===========================================================================
   context('With auto login', () => {
     beforeEach(() => {
-      cy.login('demo', 'demo');
+      cy.login('demo', 'demo'); //Izmanto funkc., kas ir "commands.js"
       HomePage.visit();
     });
 
@@ -137,4 +155,5 @@ describe('Juice-shop scenarios', () => {
     // Click Submit button
     // Validate that the card shows up in the list
   });
+  //===========================================================================
 });
