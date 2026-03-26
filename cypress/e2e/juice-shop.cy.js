@@ -8,6 +8,7 @@ import { OrderSummaryPage } from '../pageObjects/orderSummaryPage.js';
 import { PaymentOptionsPage } from '../pageObjects/paymentOptionsPage.js';
 import { RegistrationPage } from '../pageObjects/registrationPage';
 import { SavedAddressesPage } from '../pageObjects/savedAddressesPage.js';
+import { SavedPaymentMethodsPage } from '../pageObjects/savedPaymentMethodsPage.js';
 import { SelectAddressPage } from '../pageObjects/selectAddressPage.js';
 
 describe('Juice-shop scenarios', () => {
@@ -180,7 +181,7 @@ describe('Juice-shop scenarios', () => {
       OrderCompletionPage.confirm.should('contain.text', 'Thank you for your purchase!');
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    it.only('Add address', () => {
+    it('Add address', () => {
       HomePage.accountButton.click();                              // Click on Account
       HomePage.accountMenu.contains('Orders & Payment').click();   // Click on Orders & Payment
       HomePage.accountMenu.contains('My saved addresses').click(); // Click on My saved addresses
@@ -213,18 +214,27 @@ describe('Juice-shop scenarios', () => {
       SavedAddressesPage.allAddresses.contains(testData.country).should("contain.text", testData.country);
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    // Create scenario - Add payment option
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My payment options
-    // Create page object - SavedPaymentMethodsPage
+    it.only('Add payment option', () => {
+    HomePage.accountButton.click();                              // Click on Account
+    HomePage.accountMenu.contains('Orders & Payment').click();   // Click on Orders & Payment
+    HomePage.accountMenu.contains('My Payment Options').click(); // Click on My payment options
+
     // Click Add new card
-    // Fill in Name
-    // Fill in Card Number
-    // Set expiry month to 7
-    // Set expiry year to 2090
-    // Click Submit button
+    SavedPaymentMethodsPage.newCardButton.click();
+
+    const cardData = {
+      name:           'John Doe',
+      cardnr: '1230001230001230',
+    }
+    SavedPaymentMethodsPage.paymentField('Name').type(cardData.name);          // Fill in Name
+    SavedPaymentMethodsPage.paymentField('Card Number').type(cardData.cardnr); // Fill in Card Number
+    SavedPaymentMethodsPage.monthDropdown.select("7");                         // Set expiry month to 7
+    SavedPaymentMethodsPage.yearDropdown.select("2090");                       // Set expiry year to 2090
+    SavedPaymentMethodsPage.submitButton.click();                              // Click Submit button
+  
     // Validate that the card shows up in the list
+    SavedPaymentMethodsPage.allPayments.contains(cardData.name).parent().should("contain.text", cardData.name);
+    });
     //--------------------------------------------------------------------------------------------------------------------------------------
   });
   //===========================================================================
