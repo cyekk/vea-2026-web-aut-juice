@@ -61,4 +61,12 @@ export class HomePage extends BasePage {
     return cy.get('#submitButton');
   }
   //---------------------------------------------------------
+  static get itemsPerPageDropdown() {
+    return cy.get('.mat-mdc-paginator-touch-target');
+  }
+
+  static get itemsPerPageOptions() {
+    return cy.get("[role='option']");
+  }
+  //---------------------------------------------------------
 }
