@@ -105,7 +105,7 @@ describe('Juice-shop scenarios', () => {
       HomePage.productBoxInfo.should('contain.text','Sweet & tasty!');
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    it.only('Read a review', () => {
+    it('Read a review', () => {
       HomePage.searchIcon.click();               // Click on search icon
       HomePage.searchField.type('King{enter}');  // Search for King
       
@@ -117,15 +117,21 @@ describe('Juice-shop scenarios', () => {
       HomePage.reviewText.contains('K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!');
     });
     //--------------------------------------------------------------------------------------------------------------------------------------
-    // Create scenario - Add a review
-    // Click on search icon
-    // Search for Raspberry
-    // Select a product card - Raspberry Juice (1000ml)
-    // Type in review - "Tastes like metal"
-    // Click Submit
-    // Click expand reviews button/icon (wait for reviews to appear)
-    // Validate review -  "Tastes like metal"
+    it.only('Add a review', () => {
+      HomePage.searchIcon.click();                    // Click on search icon
+      HomePage.searchField.type('Raspberry{enter}');  // Search for Raspberry
 
+      // Select a product card - Raspberry Juice (1000ml)
+      HomePage.productNames.contains('Raspberry Juice (1000ml)').click();
+      // Type in review - "Tastes like metal"
+      HomePage.reviewTextBox.click().type('Tastes like metal');
+      // Click Submit
+      HomePage.submitButton.click();
+      // Click expand reviews button/icon (wait for reviews to appear)
+      HomePage.reviewButton.click();
+      // Validate review -  "Tastes like metal"
+      HomePage.reviewText.contains('Tastes like metal');
+    });
     //--------------------------------------------------------------------------------------------------------------------------------------
     // Create scenario - Validate product card amount
     // Validate that the default amount of cards is 12
