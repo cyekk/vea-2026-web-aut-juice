@@ -45,4 +45,12 @@ export class HomePage extends BasePage {
     return cy.get('.close-dialog');
   }
   //---------------------------------------------------------
+  static get reviewButton() {
+    return cy.get('.mat-expansion-panel');
+  }
+
+  static get reviewText() {
+    return cy.get('.mat-expansion-panel-content');
+  }
+  //---------------------------------------------------------
 }
